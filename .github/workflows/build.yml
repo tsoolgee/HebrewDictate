@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        shell: cmd
+        run: build.bat
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Compress-Archive -Path bin\HebrewDictate.exe, README.md, README.he.md, LICENSE -DestinationPath dist\HebrewDictate-win.zip
+          (Get-FileHash dist\HebrewDictate-win.zip -Algorithm SHA256).Hash | Out-File dist\SHA256.txt -Encoding ascii
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HebrewDictate
+          path: dist/*
