@@ -19,7 +19,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
-          Compress-Archive -Path bin\HebrewDictate.exe, README.md, README.he.md, LICENSE -DestinationPath dist\HebrewDictate-win.zip
+          Compress-Archive -Path bin\HebrewDictate.exe, README.md, README.en.md, LICENSE -DestinationPath dist\HebrewDictate-win.zip
           (Get-FileHash dist\HebrewDictate-win.zip -Algorithm SHA256).Hash | Out-File dist\SHA256.txt -Encoding ascii
       - uses: actions/upload-artifact@v4
         with:
